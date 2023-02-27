@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "193804876013",
+    "project_id": "game-compose",
+    "storage_bucket": "game-compose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193804876013:android:47953ca7cb2fe1270e74e4",
+        "android_client_info": {
+          "package_name": "com.mgomezm.gamecompose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193804876013-5dh7q8e26km8upf1pcrs9cj0aeisi5ir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWz8ztz9KelBhOkHSn7L_ceE8c6r-PvOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "193804876013-5dh7q8e26km8upf1pcrs9cj0aeisi5ir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
