@@ -29,7 +29,7 @@ fun DefaultButton(
     Column() {
         Button(
             modifier = modifier,
-            onClick = { onClick },
+            onClick = { onClick() },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = color
             ),

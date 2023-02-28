@@ -128,9 +128,7 @@ fun LoginContent(
                         .fillMaxWidth()
                         .padding(vertical = 40.dp),
                     text = "Log in",
-                    onClick = {
-                        viewModel.login()
-                    },
+                    onClick = { viewModel.login() },
                     enabled = viewModel.isEnabledLoginButton
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -141,7 +139,7 @@ fun LoginContent(
     }
 
     loginFlow.value.let {state ->
-        when(state) {
+        when (state) {
             Response.Loading -> {
                 CircularProgressBar()
             }

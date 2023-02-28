@@ -32,7 +32,13 @@ class LoginViewModel @Inject constructor(
     private val _loginFlow = MutableStateFlow<Response<FirebaseUser>?>(null)
     val loginFlow: StateFlow<Response<FirebaseUser>?> = _loginFlow
 
-    //
+    init {
+        if (authUseCase.getCurrentUser() != null) {
+            // Sesión iniciada
+            _loginFlow.value = Response.Success(authUseCase.getCurrentUser()!!)
+        }
+    }
+
     fun login() = viewModelScope.launch {
         _loginFlow.value = Response.Loading
         val result = authUseCase.login(email.value, password.value)
