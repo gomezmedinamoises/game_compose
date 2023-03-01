@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.mgomezm.gamecompose.presentation.navigation.AppNavigation
-import com.mgomezm.gamecompose.presentation.screens.login.LoginScreen
 import com.mgomezm.gamecompose.presentation.ui.theme.GameComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -29,11 +29,13 @@ class LoginViewModel @Inject constructor(
 
     var isEnabledLoginButton = false
 
+    val currentUser = authUseCase.getCurrentUser()
+
     private val _loginFlow = MutableStateFlow<Response<FirebaseUser>?>(null)
     val loginFlow: StateFlow<Response<FirebaseUser>?> = _loginFlow
 
     init {
-        if (authUseCase.getCurrentUser() != null) {
+        if (currentUser != null) {
             // Sesión iniciada
             _loginFlow.value = Response.Success(authUseCase.getCurrentUser()!!)
         }

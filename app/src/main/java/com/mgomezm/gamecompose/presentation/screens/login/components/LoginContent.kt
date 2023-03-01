@@ -23,10 +23,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.mgomezm.gamecompose.R
 import com.mgomezm.gamecompose.domain.model.Response
 import com.mgomezm.gamecompose.presentation.components.DefaultButton
 import com.mgomezm.gamecompose.presentation.components.DefaultTextField
+import com.mgomezm.gamecompose.presentation.navigation.AppScreen
 import com.mgomezm.gamecompose.presentation.screens.login.LoginViewModel
 import com.mgomezm.gamecompose.presentation.ui.theme.DarkGray500
 import com.mgomezm.gamecompose.presentation.ui.theme.GameComposeTheme
@@ -34,6 +36,7 @@ import com.mgomezm.gamecompose.presentation.ui.theme.Red500
 
 @Composable
 fun LoginContent(
+    navController: NavHostController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
 
@@ -43,99 +46,8 @@ fun LoginContent(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        // BoxHeader
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(270.dp)
-                .background(Red500)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(40.dp))
-                Image(
-                    modifier = Modifier.height(130.dp),
-                    painter = painterResource(id = R.drawable.control),
-                    contentDescription = "Xbox 360 control"
-                )
-                Text(
-                    text = "Game Compose with Firebase"
-                )
-            }
-        }
-
-
-        // CardForm
-        Card(
-            modifier = Modifier.padding(
-                start = 40.dp,
-                end = 40.dp,
-                top = 220.dp
-            ),
-            backgroundColor = DarkGray500
-
-        ) {
-            Column(
-                modifier = Modifier.padding(
-                    horizontal = 20.dp
-                )
-            ) {
-                Text(
-                    modifier = Modifier.padding(
-                        top = 40.dp
-                    ),
-                    text = "Log-in",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = "Please, sign-in to continue",
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
-                // Email
-                DefaultTextField(
-                    modifier = Modifier.padding(top = 25.dp),
-                    value = viewModel.email.value,
-                    onValueChange = { viewModel.email.value = it },
-                    label = "Email",
-                    icon = Icons.Default.Email,
-                    keyboardType = KeyboardType.Email,
-                    errorMessage = viewModel.emailErrorMessage.value,
-                    validateField = {
-                        viewModel.validateEmail()
-                    }
-                )
-                // Password
-                DefaultTextField(
-                    modifier = Modifier.padding(top = 0.dp),
-                    value = viewModel.password.value,
-                    onValueChange = { viewModel.password.value = it },
-                    label = "Password",
-                    icon = Icons.Default.Lock,
-                    hideText = true,
-                    errorMessage = viewModel.passwordErrorMessage.value,
-                    validateField = {
-                        viewModel.validatePassword()
-                    }
-                )
-                // Button
-                DefaultButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 40.dp),
-                    text = "Log in",
-                    onClick = { viewModel.login() },
-                    enabled = viewModel.isEnabledLoginButton
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-        }
-       // BoxHeader()
-       // CardForm()
+       BoxHeader()
+       CardForm()
     }
 
     loginFlow.value.let {state ->
@@ -143,13 +55,17 @@ fun LoginContent(
             Response.Loading -> {
                 CircularProgressBar()
             }
-            is Response.Success -> Toast.makeText(LocalContext.current, "User logged", Toast.LENGTH_LONG).show()
+            is Response.Success -> {
+                LaunchedEffect(Unit) {
+                    navController.navigate(route = AppScreen.Profile.route)
+                }
+            }
             is Response.Failure -> Toast.makeText(LocalContext.current, state.exception?.message ?: "Unknown error", Toast.LENGTH_SHORT).show()
         }
     }
 }
 
-/*@Composable
+@Composable
 fun BoxHeader() {
     Box(
         modifier = Modifier
@@ -172,9 +88,9 @@ fun BoxHeader() {
             )
         }
     }
-}*/
+}
 
-/*@Composable
+@Composable
 fun CardForm(viewModel: LoginViewModel = hiltViewModel()) {
 
     Card(
@@ -245,7 +161,7 @@ fun CardForm(viewModel: LoginViewModel = hiltViewModel()) {
             Spacer(modifier = Modifier.height(10.dp))
         }
     }
-}*/
+}
 
 @Composable
 fun CircularProgressBar() {
