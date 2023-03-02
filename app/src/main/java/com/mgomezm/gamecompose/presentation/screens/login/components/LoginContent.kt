@@ -57,7 +57,10 @@ fun LoginContent(
             }
             is Response.Success -> {
                 LaunchedEffect(Unit) {
-                    navController.navigate(route = AppScreen.Profile.route)
+                    navController.navigate(route = AppScreen.Profile.route) {
+                        // Delete previous screen
+                        popUpTo(AppScreen.Login.route) { inclusive = true }
+                    }
                 }
             }
             is Response.Failure -> Toast.makeText(LocalContext.current, state.exception?.message ?: "Unknown error", Toast.LENGTH_SHORT).show()

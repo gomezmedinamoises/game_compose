@@ -6,6 +6,7 @@ import com.mgomezm.gamecompose.domain.repository.AuthRepository
 import com.mgomezm.gamecompose.domain.usecases.auth.AuthUseCase
 import com.mgomezm.gamecompose.domain.usecases.auth.GetCurrentUserUseCase
 import com.mgomezm.gamecompose.domain.usecases.auth.LoginUseCase
+import com.mgomezm.gamecompose.domain.usecases.auth.LogoutUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +25,9 @@ object AppModule {
     @Provides
     fun provideAuthUseCase(repository: AuthRepository) = AuthUseCase(
         getCurrentUser = GetCurrentUserUseCase(repository),
-        login = LoginUseCase(repository)
+        login = LoginUseCase(repository),
+        logout = LogoutUseCase(repository)
     )
+
+
 }
