@@ -3,6 +3,7 @@ package com.mgomezm.gamecompose.data.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.mgomezm.gamecompose.domain.model.Response
+import com.mgomezm.gamecompose.domain.model.User
 import com.mgomezm.gamecompose.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -19,6 +20,16 @@ class AuthRepositoryImpl @Inject constructor(
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             Response.Success(result.user!!)
         } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun signUp(user: User): Response<FirebaseUser> {
+        return try {
+            val result = firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).await()
+            Response.Success(result.user!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
             Response.Failure(e)
         }
     }

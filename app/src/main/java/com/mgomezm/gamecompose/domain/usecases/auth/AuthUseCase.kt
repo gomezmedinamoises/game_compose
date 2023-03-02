@@ -4,5 +4,6 @@ package com.mgomezm.gamecompose.domain.usecases.auth
 data class AuthUseCase(
     val getCurrentUser: GetCurrentUserUseCase,
     val login: LoginUseCase,
-    val logout: LogoutUseCase
+    val logout: LogoutUseCase,
+    val signUp: SignUpUseCase
 )

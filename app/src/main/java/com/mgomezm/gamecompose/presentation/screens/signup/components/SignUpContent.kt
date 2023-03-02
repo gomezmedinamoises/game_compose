@@ -1,5 +1,6 @@
 package com.mgomezm.gamecompose.presentation.screens.signup.components
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,9 +24,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.mgomezm.gamecompose.R
+import com.mgomezm.gamecompose.domain.model.Response
 import com.mgomezm.gamecompose.presentation.components.DefaultButton
+import com.mgomezm.gamecompose.presentation.components.DefaultProgressIndicator
 import com.mgomezm.gamecompose.presentation.components.DefaultTextField
+import com.mgomezm.gamecompose.presentation.navigation.AppScreen
 import com.mgomezm.gamecompose.presentation.screens.signup.SignUpViewModel
 import com.mgomezm.gamecompose.presentation.ui.theme.DarkGray500
 import com.mgomezm.gamecompose.presentation.ui.theme.GameComposeTheme
@@ -32,7 +38,13 @@ import com.mgomezm.gamecompose.presentation.ui.theme.Red500
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun SignUpContent(viewModel: SignUpViewModel = hiltViewModel()) {
+fun SignUpContent(
+    navController: NavHostController,
+    viewModel: SignUpViewModel = hiltViewModel()
+) {
+
+    val signUpFlow = viewModel.signUpFlow.collectAsState()
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,25 +152,34 @@ fun SignUpContent(viewModel: SignUpViewModel = hiltViewModel()) {
                         .fillMaxWidth()
                         .padding(vertical = 40.dp),
                     text = "Sign in",
-                    onClick = {  },
+                    onClick = { viewModel.onSignUp() },
                     enabled = viewModel.isEnabledLoginButton,
                     errorMessage = ""
                 )
             }
         }
     }
-}
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun DefaultPreviewSignUpContent() {
-    GameComposeTheme(darkTheme = true) {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ) {
-            SignUpContent()
+    signUpFlow.value.let { state ->
+        when (state) {
+            Response.Loading -> {
+                DefaultProgressIndicator()
+            }
+            is Response.Success -> {
+                LaunchedEffect(Unit) {
+                    navController.navigate(route = AppScreen.Profile.route) {
+                        // Delete previous screen
+                        popUpTo(AppScreen.SignUp.route) { inclusive = true }
+                    }
+                }
+            }
+            is Response.Failure -> {
+                Toast.makeText(
+                    LocalContext.current,
+                    state.exception?.message ?: "Unknown error",
+                    Toast.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 }

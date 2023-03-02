@@ -1,7 +1,6 @@
 package com.mgomezm.gamecompose.presentation.screens.profile
 
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,7 +22,7 @@ fun ProfileScreen(
                 text = "Log out",
                 onClick = {
                     viewModel.logout()
-                    navController.navigate(AppScreen.Login.route) {
+                    navController.navigate(route = AppScreen.Login.route) {
                         // Delete previous screen
                         popUpTo(AppScreen.Profile.route) { inclusive = true }
                     }

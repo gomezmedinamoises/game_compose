@@ -49,5 +49,4 @@ fun DefaultButton(
             color = Red700
         )
     }
-
 }

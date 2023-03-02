@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.mgomezm.gamecompose.R
 import com.mgomezm.gamecompose.domain.model.Response
 import com.mgomezm.gamecompose.presentation.components.DefaultButton
+import com.mgomezm.gamecompose.presentation.components.DefaultProgressIndicator
 import com.mgomezm.gamecompose.presentation.components.DefaultTextField
 import com.mgomezm.gamecompose.presentation.navigation.AppScreen
 import com.mgomezm.gamecompose.presentation.screens.login.LoginViewModel
@@ -53,7 +54,7 @@ fun LoginContent(
     loginFlow.value.let {state ->
         when (state) {
             Response.Loading -> {
-                CircularProgressBar()
+                DefaultProgressIndicator()
             }
             is Response.Success -> {
                 LaunchedEffect(Unit) {
@@ -163,15 +164,5 @@ fun CardForm(viewModel: LoginViewModel = hiltViewModel()) {
             )
             Spacer(modifier = Modifier.height(10.dp))
         }
-    }
-}
-
-@Composable
-fun CircularProgressBar() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        CircularProgressIndicator()
     }
 }

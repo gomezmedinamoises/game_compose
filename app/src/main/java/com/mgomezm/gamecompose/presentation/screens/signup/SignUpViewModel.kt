@@ -4,11 +4,22 @@ import android.util.Patterns
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.auth.FirebaseUser
+import com.mgomezm.gamecompose.domain.model.Response
+import com.mgomezm.gamecompose.domain.model.User
+import com.mgomezm.gamecompose.domain.usecases.auth.AuthUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(): ViewModel() {
+class SignUpViewModel @Inject constructor(
+    private val authUseCase: AuthUseCase
+): ViewModel() {
 
     // Username
     var username: MutableState<String> = mutableStateOf("")
@@ -31,6 +42,25 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
     var confirmPasswordErrorMessage: MutableState<String> = mutableStateOf("")
 
     var isEnabledLoginButton = false
+
+    private val _signUpFlow = MutableStateFlow<Response<FirebaseUser>?>(null)
+    val signUpFlow: StateFlow<Response<FirebaseUser>?> = _signUpFlow
+
+    fun onSignUp() {
+        val user = User(
+            username = username.value,
+            email = email.value,
+            password = password.value
+        )
+
+
+        signUp(user)
+    }
+    fun signUp(user: User) = viewModelScope.launch {
+        _signUpFlow.value = Response.Loading
+        val result = authUseCase.signUp(user)
+        _signUpFlow.value = result
+    }
 
     fun enableLoginButton() {
         isEnabledLoginButton = isEmailValid.value &&
